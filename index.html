@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            overflow: hidden; 
+            margin: 0; 
+            font-family: 'Inter', sans-serif;
+            background: #fff0f3;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Ambient Particles */
+        #particles {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 100;
+        }
+        .particle {
+            position: absolute; background: #f472b6; border-radius: 50%;
+            pointer-events: none; animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            20% { opacity: var(--max-opacity); }
+            80% { opacity: var(--max-opacity); }
+            100% { transform: translateY(-20vh) translateX(var(--drift)); opacity: 0; }
+        }
+
+        /* Stages Base */
+        .stage {
+            position: fixed; inset: 0; opacity: 0; pointer-events: none;
+            transition: opacity 800ms ease, background 800ms ease;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .stage.active { opacity: 1; pointer-events: auto; }
+
+        /* Stage 1 - The Gift */
+        #stage1 { background: linear-gradient(135deg, #fff0f3 0%, #ffd6e0 100%); cursor: pointer; }
+        .gift-wrapper { animation: floatGift 3s ease-in-out infinite; display: flex; flex-direction: column; align-items: center; }
+        @keyframes floatGift {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .gift-box {
+            position: relative; width: 120px; height: 100px;
+            background: #f472b6; border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(244, 114, 182, 0.3);
+        }
+        .gift-box::before {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 100%; background: #ec4899;
+        }
+        .gift-box::after {
+            content: ''; position: absolute; top: 50%; left: 0; transform: translateY(-50%);
+            width: 100%; height: 20px; background: #ec4899;
+        }
+        .gift-lid {
+            position: absolute; top: -15px; left: -5px; width: 130px; height: 25px;
+            background: #f472b6; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 2;
+        }
+        .gift-lid::before {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 100%; background: #ec4899;
+        }
+        .bow {
+            position: absolute; top: -35px; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 20px; z-index: 3; display: flex; justify-content: space-between;
+        }
+        .bow-loop { width: 28px; height: 20px; border: 4px solid #ec4899; border-radius: 50%; }
+        .gift-text {
+            margin-top: 40px; font-family: 'Inter', sans-serif; font-size: 13px;
+            letter-spacing: 4px; text-transform: uppercase; color: #be185d; opacity: 0.7; font-weight: 600;
+        }
+
+        /* Stage 2 - The Heart */
+        #stage2 { background: linear-gradient(135deg, #ffe4ec 0%, #ffc8d6 100%); cursor: pointer; }
+        .heart-wrapper { display: flex; flex-direction: column; align-items: center; }
+        .glowing-heart {
+            position: relative; width: 80px; height: 80px; margin-top: 40px;
+            animation: pulseHeart 2s ease-in-out infinite;
+        }
+        .glowing-heart::before, .glowing-heart::after {
+            content: ''; position: absolute; top: 0; width: 80px; height: 120px; background: #ec4899;
+            border-radius: 40px 40px 0 0; box-shadow: 0 0 40px rgba(236, 72, 153, 0.6), inset 0 0 20px rgba(255,255,255,0.4);
+        }
+        .glowing-heart::before { left: 40px; transform: rotate(-45deg); transform-origin: 0 100%; }
+        .glowing-heart::after { left: -40px; transform: rotate(45deg); transform-origin: 100% 100%; }
+        @keyframes pulseHeart {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.08); filter: brightness(1.2); }
+        }
+        .heart-text {
+            font-family: 'Cormorant Garamond', serif; font-style: italic;
+            font-size: 22px; color: #9d174d; margin-bottom: 20px; text-align: center;
+        }
+        .cupid-arrow {
+            position: absolute; width: 120px; height: 24px; top: 50%; left: -200px;
+            opacity: 0; z-index: 10; pointer-events: none;
+        }
+        .stage.active .cupid-arrow {
+            animation: shootArrow 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 1s;
+        }
+        @keyframes shootArrow {
+            0% { left: -200px; top: -100px; transform: rotate(35deg); opacity: 0; }
+            100% { left: -30px; top: 40px; transform: rotate(35deg); opacity: 1; }
+        }
+
+        /* Stage 3 - The Reveal */
+        #stage3 { background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); cursor: pointer; }
+        .reveal-text {
+            font-family: 'Playfair Display', serif; font-weight: 700; font-size: 64px; color: white;
+            text-align: center; text-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            opacity: 0; transform: translateY(30px); transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .stage.active .reveal-text { opacity: 1; transform: translateY(0); }
+        @media (max-width: 768px) { .reveal-text { font-size: 40px; padding: 0 20px; } }
+
+        /* Stage 4 - The Tree */
+        #stage4 { background: #fff0f5; justify-content: flex-end; padding-bottom: 80px; }
+        .tree-container {
+            position: absolute; bottom: 250px; width: 100%; height: 300px;
+            display: flex; justify-content: center; align-items: flex-end; z-index: 1;
+        }
+        .tree-trunk {
+            width: 14px; height: 180px; background: linear-gradient(to right, #78350f, #92400e, #78350f);
+            border-radius: 10px 10px 0 0; transform-origin: bottom center;
+            transform: scaleY(0); transition: transform 1.5s ease-out;
+        }
+        .stage.active .tree-trunk { transform: scaleY(1); }
+        .tree-leaves {
+            position: absolute; bottom: 150px; left: 50%; transform: translateX(-50%);
+            width: 300px; height: 300px; pointer-events: none;
+        }
+        .leaf {
+            position: absolute; border-radius: 50%; opacity: 0; transform: scale(0);
+        }
+        .stage.active .leaf.bloomed { 
+            animation: leafJump 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes leafJump {
+            0% { transform: scale(0) translateY(0); opacity: 0; }
+            50% { transform: scale(1.2) translateY(-15px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        
+        .tree-text-container { text-align: center; z-index: 10; margin-bottom: 20px; }
+        .tree-msg1 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px; color: #9d174d; opacity: 0; transition: opacity 1s ease; }
+        .tree-msg2 { font-family: 'Playfair Display', serif; font-size: 36px; color: #be185d; opacity: 0; transition: opacity 1s ease; margin: 8px 0; }
+        .tree-msg3 { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: #be185d; opacity: 0; transition: opacity 1s ease; }
+        .stage.active .tree-msg1.visible, .stage.active .tree-msg2.visible, .stage.active .tree-msg3.visible { opacity: 1; }
+
+        .btn-next {
+            background: #ec4899; color: white; font-family: 'Inter', sans-serif; font-size: 14px;
+            padding: 10px 32px; border-radius: 24px; border: none; cursor: pointer;
+            margin-top: 15px; opacity: 0; transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease, background 0.3s;
+            box-shadow: 0 5px 15px rgba(236, 72, 153, 0.3); z-index: 10;
+        }
+        .stage.active .btn-next.visible { opacity: 1; transform: translateY(0); }
+        .btn-next:hover { transform: translateY(-2px) scale(1.05) !important; background: #db2777; }
+
+        /* Stage 5 - Memory Lane */
+        #stage5 { background: #fff5f8; justify-content: flex-start; padding: 60px 20px; overflow-y: auto; display: block; }
+        .memory-title {
+            font-family: 'Playfair Display', serif; font-style: italic; font-size: 42px;
+            color: #be185d; text-align: center; margin-bottom: 40px; opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .stage.active .memory-title { opacity: 1; }
+        .masonry-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;
+            max-width: 1000px; margin: 0 auto; padding-bottom: 50px;
+        }
+        @media (max-width: 900px) { .masonry-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .masonry-grid { grid-template-columns: 1fr; max-width: 350px; } }
+        
+        .polaroid {
+            background: white; padding: 12px 12px 50px 12px; border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            opacity: 0; transform: translateY(20px) rotate(0deg);
+            transition: opacity 0.8s ease, transform 0.8s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .polaroid:hover { z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .photo-placeholder {
+            width: 100%; aspect-ratio: 1; background: #fce7f3;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 32px; color: #f472b6; border-radius: 2px;
+        }
+        /* Stage 6 - Wish Generator */
+        #stage6 { background: #fffaf0; justify-content: flex-start; padding: 60px 20px; overflow-y: auto; display: block; }
+        .wish-generator-container { max-width: 600px; margin: 0 auto; text-align: center; }
+        .sticky-notes { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+        .sticky-note {
+            background: #fef08a; padding: 15px; border-radius: 2px;
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.1); font-family: 'Cormorant Garamond', serif;
+            font-size: 18px; width: 140px; transform: rotate(-2deg); color: #854d0e;
+        }
+        .sticky-note:nth-child(2) { transform: rotate(3deg); background: #fde047; }
+        .sticky-note:nth-child(3) { transform: rotate(-1deg); }
+        .input-group { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .name-input {
+            width: 100%; padding: 15px; border: 2px solid #fbcfe8; border-radius: 8px;
+            font-family: 'Inter', sans-serif; font-size: 16px; margin-bottom: 20px; outline: none;
+            text-align: center;
+        }
+        .name-input:focus { border-color: #f472b6; }
+        .btn-generate {
+            background: linear-gradient(135deg, #fcd34d, #f59e0b); color: white;
+            font-family: 'Inter', sans-serif; font-weight: 600; font-size: 16px;
+            padding: 15px 40px; border-radius: 30px; border: none; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3); transition: transform 0.3s;
+        }
+        .btn-generate:hover { transform: scale(1.05); }
+        .wish-result-card {
+            margin-top: 30px; padding: 25px; background: white; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: none; opacity: 0; transition: opacity 0.5s;
+        }
+        .wish-text-display { font-family: 'Playfair Display', serif; font-size: 24px; color: #be185d; margin-bottom: 25px; line-height: 1.4; }
+        .btn-whatsapp {
+            background: #25D366; color: white; padding: 12px 25px; border-radius: 25px;
+            border: none; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 14px;
+            font-weight: 600; display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3); transition: transform 0.3s;
+        }
+        .btn-whatsapp:hover { transform: scale(1.05); }
+        
+        .btn-to-wish {
+            background: #be185d; color: white; font-family: 'Inter', sans-serif; font-size: 14px;
+            padding: 12px 32px; border-radius: 24px; border: none; cursor: pointer;
+            margin: 40px auto 20px auto; display: block; opacity: 0; transition: opacity 1s ease, transform 0.3s;
+        }
+        .btn-to-wish:hover { transform: scale(1.05); background: #9d174d; }
+        .stage.active .btn-to-wish { opacity: 1; }
+
+        .music-btn {
+            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
+            background: rgba(255, 255, 255, 0.8); border: none; border-radius: 50%;
+            font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 1000; display: flex; justify-content: center; align-items: center;
+            transition: transform 0.3s;
+        }
+        .music-btn:hover { transform: scale(1.1); }
+        .music-btn.playing { animation: pulseMusic 2s infinite; }
+        @keyframes pulseMusic { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    </style>
+</head>
+<body>
+
+    <div id="particles"></div>
+
+    <!-- Stage 1 -->
+    <div id="stage1" class="stage active" onclick="nextStage(2)">
+        <div class="gift-wrapper">
+            <div class="gift-box">
+                <div class="gift-lid"></div>
+                <div class="bow">
+                    <div class="bow-loop"></div>
+                    <div class="bow-loop"></div>
+                </div>
+            </div>
+            <div class="gift-text">Pull & Release</div>
+        </div>
+    </div>
+
+    <!-- Stage 2 -->
+    <div id="stage2" class="stage" onclick="nextStage(3)">
+        <div class="heart-wrapper">
+            <div class="heart-text">a little something for you</div>
+            <div class="glowing-heart">
+                <svg class="cupid-arrow" viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="10" y1="10" x2="90" y2="10" stroke="#be185d" stroke-width="3" stroke-linecap="round"/>
+                    <polygon points="85,4 100,10 85,16" fill="#be185d"/>
+                    <line x1="10" y1="10" x2="0" y2="4" stroke="#be185d" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="10" y1="10" x2="0" y2="16" stroke="#be185d" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="20" y1="10" x2="10" y2="4" stroke="#be185d" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="20" y1="10" x2="10" y2="16" stroke="#be185d" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stage 3 -->
+    <div id="stage3" class="stage" onclick="nextStage(4)">
+        <div class="reveal-text">
+            Happy Birthday<br>
+            <span style="font-size: 48px; font-family: 'Cormorant Garamond', serif; font-style: italic;">Thamanna Zainab</span><br>
+            <span style="font-size: 18px; font-family: 'Inter', sans-serif; letter-spacing: 2px; font-weight: 400; display: block; margin-top: 15px;">17.09.2026  •  @zxynxb_06</span>
+        </div>
+    </div>
+
+    <!-- Stage 4 -->
+    <div id="stage4" class="stage">
+        <div class="tree-container">
+            <img id="treeImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMHRNMDt3KDKb_XKlDnSTpgSKrturVKFmcBHoCsk5MQQ&s=10" alt="Heart Tree" style="height: 100%; max-width: 100%; object-fit: contain; opacity: 0; transform: scale(0.5); transition: opacity 1.5s ease, transform 1.5s ease; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));">
+        </div>
+        <div class="tree-text-container">
+            <div class="tree-msg1" id="msg1">and... make it count.</div>
+            <div class="tree-msg2" id="msg2">Happy Birthday Thamanna Zainab.</div>
+            <div class="tree-msg3" id="msg3">Here is to a year that blooms</div>
+        </div>
+        <button class="btn-next" id="btnNext" onclick="nextStage(5)">Next</button>
+    </div>
+
+    <!-- Stage 5 -->
+    <div id="stage5" class="stage">
+        <h2 class="memory-title">Memory Lane</h2>
+        <div class="masonry-grid" id="masonryGrid">
+            <!-- 6 polaroids will be injected via JS -->
+        </div>
+        <button class="btn-to-wish" onclick="nextStage(6)">Make a Wish ✨</button>
+    </div>
+
+    <!-- Stage 6 -->
+    <div id="stage6" class="stage">
+        <div class="wish-generator-container">
+            <h2 class="memory-title" style="margin-bottom: 40px; font-size: 36px;">Wish Generator</h2>
+            <div class="sticky-notes">
+                <div class="sticky-note">"Wishing you endless joy!"</div>
+                <div class="sticky-note">"May your day shine bright."</div>
+                <div class="sticky-note">"Here is to a great year!"</div>
+            </div>
+            <div class="input-group">
+                <input type="text" id="wishName" class="name-input" placeholder="Enter birthday person's name...">
+                <button class="btn-generate" onclick="generateWish()">Generate Wish</button>
+            </div>
+            
+            <div id="wishResultCard" class="wish-result-card">
+                <div id="wishTextDisplay" class="wish-text-display"></div>
+                <button class="btn-whatsapp" onclick="shareWhatsApp()">Share on WhatsApp 💬</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Player Placeholder -->
+    <audio id="bgMusic" src="" loop></audio>
+    <button id="musicBtn" class="music-btn" onclick="toggleMusic()">🎵</button>
+
+    <script>
+        // Particles setup
+        const particlesContainer = document.getElementById('particles');
+        const colors = ['#f472b6', '#fb7185', '#fbcfe8', '#fce7f3'];
+        for(let i=0; i<40; i++) {
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            const size = Math.random() * 8 + 4;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+            p.style.animationDelay = (Math.random() * 10) + 's';
+            p.style.setProperty('--max-opacity', Math.random() * 0.25 + 0.15);
+            p.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
+            particlesContainer.appendChild(p);
+        }
+
+        // Music Logic
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let isPlaying = false;
+        function toggleMusic() {
+            if(!bgMusic.src || bgMusic.src.endsWith(window.location.host + '/') || bgMusic.src.endsWith('index.html')) {
+                alert("Please add your song file to the 'src' attribute of the audio tag in index.html!");
+                return;
+            }
+            if(isPlaying) {
+                bgMusic.pause();
+                musicBtn.classList.remove('playing');
+            } else {
+                bgMusic.play();
+                musicBtn.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Stage Management
+        let currentStage = 1;
+        let stageTimeout;
+
+        function nextStage(targetStage) {
+            if(targetStage <= currentStage) return;
+            clearTimeout(stageTimeout);
+            
+            document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+            document.getElementById('stage' + targetStage).classList.add('active');
+            currentStage = targetStage;
+
+            if (currentStage === 2) {
+                stageTimeout = setTimeout(() => nextStage(3), 2500);
+            } else if (currentStage === 3) {
+                stageTimeout = setTimeout(() => nextStage(4), 2500);
+            } else if (currentStage === 4) {
+                initTree();
+            } else if (currentStage === 5) {
+                initMemoryLane();
+            } else if (currentStage === 6) {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Stage 4: Tree Heart-Blooming Logic
+        function initTree() {
+            const treeImage = document.getElementById('treeImage');
+            if(treeImage.style.opacity === '1') return; // already initialized
+
+            setTimeout(() => {
+                treeImage.style.opacity = '1';
+                treeImage.style.transform = 'scale(1)';
+            }, 500);
+
+            // Sequential Text sequence
+            setTimeout(() => { document.getElementById('msg1').classList.add('visible'); }, 2000);
+            setTimeout(() => { document.getElementById('msg2').classList.add('visible'); }, 2600);
+            setTimeout(() => { document.getElementById('msg3').classList.add('visible'); }, 3200);
+            setTimeout(() => { document.getElementById('btnNext').classList.add('visible'); }, 3800);
+        }
+
+        // Stage 5: Memory Lane Masonry Logic
+        function initMemoryLane() {
+            const grid = document.getElementById('masonryGrid');
+            if(grid.children.length > 0) return;
+
+            for(let i=0; i<3; i++) {
+                const rotation = (Math.random() * 6 - 3).toFixed(1);
+                
+                const card = document.createElement('div');
+                card.classList.add('polaroid');
+                
+                // Apply rotation initially, reset on hover is handled by CSS
+                card.style.transform = `translateY(20px) rotate(${rotation}deg)`;
+                
+                // Keep track of base rotation to restore when unhovered
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = `scale(1.03) rotate(0deg)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `translateY(0px) rotate(${rotation}deg)`;
+                });
+
+                const imgNum = (i % 3) + 1;
+                card.innerHTML = `
+                    <div style="width: 100%; aspect-ratio: 1; border-radius: 2px; overflow: hidden; background: #fce7f3; display: flex; justify-content: center; align-items: center; font-size: 32px; color: #f472b6;">
+                        <img src="image/photo${imgNum}.jpeg" alt="Memory" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentNode.innerHTML='📷';">
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = `translateY(0px) rotate(${rotation}deg)`;
+                }, 300 + (i * 150));
+            }
+            
+            // Allow scrolling on this stage
+            document.body.style.overflow = 'auto';
+        }
+
+        // Stage 6: Wish Generator Logic
+        const wishes = [
+            "Happy Birthday, {name}! May your day shine as bright as you do 🎂✨",
+            "Wishing you a fantastic birthday, {name}! May all your dreams come true! 🌟🎈",
+            "Happy Birthday {name}! Here's to another year of amazing adventures and sweet memories! 🎁❤️",
+            "Sending you the biggest hug on your special day, {name}! Have a blast! 🎉🥳",
+            "{name}, you make the world a better place just by being in it. Happy Birthday! 💖🎂"
+        ];
+        let currentWish = "";
+
+        function generateWish() {
+            const name = document.getElementById('wishName').value.trim();
+            const resultCard = document.getElementById('wishResultCard');
+            const display = document.getElementById('wishTextDisplay');
+            
+            if(name) {
+                const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+                currentWish = randomWish.replace(/{name}/g, name);
+                
+                display.innerHTML = currentWish;
+                resultCard.style.display = 'block';
+                setTimeout(() => { resultCard.style.opacity = '1'; }, 50);
+                
+                // Fire some quick particles
+                for(let i=0; i<30; i++) {
+                    const p = document.createElement('div');
+                    p.classList.add('particle');
+                    const size = Math.random() * 8 + 4;
+                    p.style.width = size + 'px'; p.style.height = size + 'px';
+                    p.style.left = (40 + Math.random() * 20) + 'vw';
+                    p.style.top = '50vh';
+                    p.style.background = ['#f472b6', '#fbbf24', '#4ade80'][Math.floor(Math.random()*3)];
+                    p.style.animation = 'floatUp 2s ease-out forwards';
+                    document.getElementById('particles').appendChild(p);
+                    setTimeout(() => p.remove(), 2000);
+                }
+            } else {
+                alert("Please enter a name first!");
+            }
+        }
+
+        function shareWhatsApp() {
+            if(!currentWish) return;
+            const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(currentWish)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
