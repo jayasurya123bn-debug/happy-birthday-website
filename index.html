@@ -81,25 +81,19 @@
         #stage2 { background: linear-gradient(135deg, #ffe4ec 0%, #ffc8d6 100%); cursor: pointer; }
         .heart-wrapper { display: flex; flex-direction: column; align-items: center; }
         .glowing-heart {
-            position: relative; width: 80px; height: 80px; background: #ec4899;
-            transform: rotate(-45deg); margin: 50px auto;
-            box-shadow: 0 0 40px rgba(236, 72, 153, 0.6);
+            position: relative; width: 120px; height: 120px; font-size: 100px;
+            line-height: 120px; text-align: center; margin: 30px auto;
+            text-shadow: 0 10px 40px rgba(236,72,153,0.6);
             animation: pulseHeart 2s ease-in-out infinite;
         }
         .stage.active .glowing-heart {
             animation: pulseHeart 2s ease-in-out infinite, boomEffect 0.6s 1.5s ease-out;
         }
         @keyframes boomEffect {
-            0% { transform: rotate(-45deg) scale(1); filter: brightness(1); }
-            50% { transform: rotate(-45deg) scale(1.5); filter: brightness(1.5); box-shadow: 0 0 100px rgba(255,255,255,1); }
-            100% { transform: rotate(-45deg) scale(1); filter: brightness(1); }
+            0% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0 rgba(255,255,255,0)); }
+            50% { transform: scale(1.4); filter: brightness(1.5) drop-shadow(0 0 80px rgba(255,255,255,1)); }
+            100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0 rgba(255,255,255,0)); }
         }
-        .glowing-heart::before, .glowing-heart::after {
-            content: ''; position: absolute; top: 0; width: 80px; height: 120px; background: #ec4899;
-            border-radius: 40px 40px 0 0; box-shadow: 0 0 40px rgba(236, 72, 153, 0.6), inset 0 0 20px rgba(255,255,255,0.4);
-        }
-        .glowing-heart::before { left: 40px; transform: rotate(-45deg); transform-origin: 0 100%; }
-        .glowing-heart::after { left: -40px; transform: rotate(45deg); transform-origin: 100% 100%; }
         @keyframes pulseHeart {
             0%, 100% { transform: scale(1); filter: brightness(1); }
             50% { transform: scale(1.08); filter: brightness(1.2); }
@@ -110,7 +104,7 @@
         }
         .cupid-arrow {
             position: absolute; width: 120px; height: 24px; top: 50%; left: -200px;
-            opacity: 0; z-index: 10; pointer-events: none;
+            opacity: 0; z-index: 10; pointer-events: none; margin-top: -12px;
         }
         .stage.active .cupid-arrow {
             animation: shootArrow 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -118,7 +112,7 @@
         }
         @keyframes shootArrow {
             0% { left: -200px; top: -100px; transform: rotate(35deg); opacity: 0; }
-            100% { left: -30px; top: 40px; transform: rotate(35deg); opacity: 1; }
+            100% { left: -20px; top: 50%; transform: rotate(35deg); opacity: 1; }
         }
 
         /* Stage 3 - The Reveal */
@@ -132,10 +126,11 @@
         @media (max-width: 768px) { .reveal-text { font-size: 40px; padding: 0 20px; } }
 
         /* Stage 4 - The Tree */
-        #stage4 { background: #fff0f5; justify-content: flex-end; padding-bottom: 80px; }
+        #stage4 { background: #fff0f5; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .tree-container {
-            position: absolute; bottom: 250px; width: 100%; height: 300px;
+            position: relative; width: 100%; height: 350px;
             display: flex; justify-content: center; align-items: flex-end; z-index: 1;
+            margin-bottom: 20px;
         }
         .tree-trunk {
             width: 14px; height: 180px; background: linear-gradient(to right, #78350f, #92400e, #78350f);
@@ -144,7 +139,7 @@
         }
         .stage.active .tree-trunk { transform: scaleY(1); }
         .tree-leaves {
-            position: absolute; bottom: 150px; left: 50%; transform: translateX(-50%);
+            position: absolute; bottom: 170px; left: 50%; transform: translateX(-50%);
             width: 300px; height: 300px; pointer-events: none;
         }
         .leaf {
@@ -285,6 +280,7 @@
         <div class="heart-wrapper">
             <div class="heart-text">a little something for you</div>
             <div class="glowing-heart">
+                ❤️
                 <svg class="cupid-arrow" viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg">
                     <line x1="10" y1="10" x2="90" y2="10" stroke="#be185d" stroke-width="3" stroke-linecap="round"/>
                     <polygon points="85,4 100,10 85,16" fill="#be185d"/>
