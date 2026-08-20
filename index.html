@@ -81,8 +81,18 @@
         #stage2 { background: linear-gradient(135deg, #ffe4ec 0%, #ffc8d6 100%); cursor: pointer; }
         .heart-wrapper { display: flex; flex-direction: column; align-items: center; }
         .glowing-heart {
-            position: relative; width: 80px; height: 80px; margin-top: 40px;
+            position: relative; width: 80px; height: 80px; background: #ec4899;
+            transform: rotate(-45deg); margin: 50px auto;
+            box-shadow: 0 0 40px rgba(236, 72, 153, 0.6);
             animation: pulseHeart 2s ease-in-out infinite;
+        }
+        .stage.active .glowing-heart {
+            animation: pulseHeart 2s ease-in-out infinite, boomEffect 0.6s 1.5s ease-out;
+        }
+        @keyframes boomEffect {
+            0% { transform: rotate(-45deg) scale(1); filter: brightness(1); }
+            50% { transform: rotate(-45deg) scale(1.5); filter: brightness(1.5); box-shadow: 0 0 100px rgba(255,255,255,1); }
+            100% { transform: rotate(-45deg) scale(1); filter: brightness(1); }
         }
         .glowing-heart::before, .glowing-heart::after {
             content: ''; position: absolute; top: 0; width: 80px; height: 120px; background: #ec4899;
@@ -148,6 +158,13 @@
             50% { transform: scale(1.2) translateY(-15px); opacity: 1; }
             100% { transform: scale(1) translateY(0); opacity: 1; }
         }
+        .tree-center-photo {
+            position: absolute; top: 120px; left: 50%; transform: translate(-50%, -50%) scale(0);
+            width: 100px; height: 100px; border-radius: 50%; object-fit: cover;
+            border: 4px solid #fff; box-shadow: 0 10px 20px rgba(236,72,153,0.3);
+            opacity: 0; z-index: 5; transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .stage.active .tree-center-photo.bloomed { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         
         .tree-text-container { text-align: center; z-index: 10; margin-bottom: 20px; }
         .tree-msg1 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px; color: #9d174d; opacity: 0; transition: opacity 1s ease; }
@@ -223,13 +240,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: none; opacity: 0; transition: opacity 0.5s;
         }
         .wish-text-display { font-family: 'Playfair Display', serif; font-size: 24px; color: #be185d; margin-bottom: 25px; line-height: 1.4; }
-        .btn-whatsapp {
-            background: #25D366; color: white; padding: 12px 25px; border-radius: 25px;
-            border: none; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 14px;
-            font-weight: 600; display: inline-flex; align-items: center; gap: 8px;
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3); transition: transform 0.3s;
-        }
-        .btn-whatsapp:hover { transform: scale(1.05); }
+        .wish-text-display { font-family: 'Playfair Display', serif; font-size: 24px; color: #be185d; margin-bottom: 25px; line-height: 1.4; }
         
         .btn-to-wish {
             background: #be185d; color: white; font-family: 'Inter', sans-serif; font-size: 14px;
@@ -298,7 +309,10 @@
     <!-- Stage 4 -->
     <div id="stage4" class="stage">
         <div class="tree-container">
-            <img id="treeImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMHRNMDt3KDKb_XKlDnSTpgSKrturVKFmcBHoCsk5MQQ&s=10" alt="Heart Tree" style="height: 100%; max-width: 100%; object-fit: contain; opacity: 0; transform: scale(0.5); transition: opacity 1.5s ease, transform 1.5s ease; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));">
+            <div class="tree-leaves" id="treeLeaves">
+                <img src="image/photo2.jpeg" class="tree-center-photo" id="treeCenterPhoto">
+            </div>
+            <div class="tree-trunk"></div>
         </div>
         <div class="tree-text-container">
             <div class="tree-msg1" id="msg1">and... make it count.</div>
@@ -333,7 +347,6 @@
             
             <div id="wishResultCard" class="wish-result-card">
                 <div id="wishTextDisplay" class="wish-text-display"></div>
-                <button class="btn-whatsapp" onclick="shareWhatsApp()">Share on WhatsApp 💬</button>
             </div>
         </div>
     </div>
@@ -407,19 +420,53 @@
 
         // Stage 4: Tree Heart-Blooming Logic
         function initTree() {
-            const treeImage = document.getElementById('treeImage');
-            if(treeImage.style.opacity === '1') return; // already initialized
+            const leavesContainer = document.getElementById('treeLeaves');
+            if(leavesContainer.children.length > 1) return;
 
+            const leafColors = ['#f472b6', '#fb7185', '#fbbf24', '#fcd34d'];
+            const numLeaves = 100;
+            const centerX = 150; 
+            const centerY = 150;
+            const scale = 8; 
+
+            for(let i=0; i<numLeaves; i++) {
+                const t = Math.PI * 2 * (i / numLeaves);
+                const randOffset = (Math.random() - 0.5) * 20; 
+                
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+
+                const finalX = centerX + x * scale + randOffset;
+                const finalY = centerY + y * scale + randOffset;
+
+                const leaf = document.createElement('div');
+                leaf.classList.add('leaf');
+                leaf.style.left = finalX + 'px';
+                leaf.style.top = finalY + 'px';
+                
+                const size = Math.random() * 15 + 8;
+                leaf.style.width = size + 'px';
+                leaf.style.height = size + 'px';
+                leaf.style.background = leafColors[Math.floor(Math.random() * leafColors.length)];
+                
+                const delay = 1000 + (Math.random() * 1500);
+                leaf.style.animationDelay = delay + 'ms';
+                
+                leavesContainer.appendChild(leaf);
+                
+                setTimeout(() => { leaf.classList.add('bloomed'); }, 50);
+            }
+
+            // Pop photo in center
             setTimeout(() => {
-                treeImage.style.opacity = '1';
-                treeImage.style.transform = 'scale(1)';
-            }, 500);
+                const centerPhoto = document.getElementById('treeCenterPhoto');
+                if(centerPhoto) centerPhoto.classList.add('bloomed');
+            }, 3000);
 
-            // Sequential Text sequence
-            setTimeout(() => { document.getElementById('msg1').classList.add('visible'); }, 2000);
-            setTimeout(() => { document.getElementById('msg2').classList.add('visible'); }, 2600);
-            setTimeout(() => { document.getElementById('msg3').classList.add('visible'); }, 3200);
-            setTimeout(() => { document.getElementById('btnNext').classList.add('visible'); }, 3800);
+            setTimeout(() => { document.getElementById('msg1').classList.add('visible'); }, 3500);
+            setTimeout(() => { document.getElementById('msg2').classList.add('visible'); }, 4100);
+            setTimeout(() => { document.getElementById('msg3').classList.add('visible'); }, 4700);
+            setTimeout(() => { document.getElementById('btnNext').classList.add('visible'); }, 5300);
         }
 
         // Stage 5: Memory Lane Masonry Logic
@@ -502,12 +549,6 @@
             } else {
                 alert("Please enter a name first!");
             }
-        }
-
-        function shareWhatsApp() {
-            if(!currentWish) return;
-            const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(currentWish)}`;
-            window.open(url, '_blank');
         }
     </script>
 </body>
