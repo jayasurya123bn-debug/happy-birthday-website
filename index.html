@@ -3,549 +3,803 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Happy Birthday</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>Happy Birthday Thamanna Zainab!</title>
+    <meta name="description" content="Happy Birthday Thamanna Zainab - 17.09.2026">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;0,800;0,900;1,400&family=Pacifico&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            overflow: hidden; 
-            margin: 0; 
-            font-family: 'Inter', sans-serif;
-            background: #fff0f3;
-            -webkit-tap-highlight-color: transparent;
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+        html,body{width:100%;height:100%;}
+        body{
+            font-family:'Nunito',sans-serif;
+            background:#FDF8F5;
+            overflow:hidden;
+            -webkit-tap-highlight-color:transparent;
         }
 
-        /* Ambient Particles */
-        #particles {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 100;
-        }
-        .particle {
-            position: absolute; background: #f472b6; border-radius: 50%;
-            pointer-events: none; animation: floatUp linear infinite;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-            20% { opacity: var(--max-opacity); }
-            80% { opacity: var(--max-opacity); }
-            100% { transform: translateY(-20vh) translateX(var(--drift)); opacity: 0; }
+        /* ── CONFETTI ── */
+        .cp{position:fixed;z-index:9999;pointer-events:none;border-radius:2px;
+            animation:cfall var(--cd,2.5s) ease-out var(--cdl,0s) forwards;}
+        @keyframes cfall{
+            0%{transform:translate(0,0) rotate(0deg) scale(1);opacity:1;}
+            100%{transform:translate(var(--cx),var(--cy)) rotate(var(--cr)) scale(0.2);opacity:0;}
         }
 
-        /* Stages Base */
-        .stage {
-            position: fixed; inset: 0; opacity: 0; pointer-events: none;
-            transition: opacity 800ms ease, background 800ms ease;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
-        .stage.active { opacity: 1; pointer-events: auto; }
+        /* ── FLOATING DOTS ── */
+        .fdot{position:fixed;border-radius:50%;pointer-events:none;z-index:9990;
+            animation:fdotAnim var(--fd,4s) ease-in-out var(--fdl,0s) infinite;}
+        @keyframes fdotAnim{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
 
-        /* Stage 1 - The Gift */
-        #stage1 { background: linear-gradient(135deg, #fff0f3 0%, #ffd6e0 100%); cursor: pointer; }
-        .gift-wrapper { animation: floatGift 3s ease-in-out infinite; display: flex; flex-direction: column; align-items: center; }
-        @keyframes floatGift {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+        /* ── STAGE BASE ── */
+        .stage{
+            position:fixed;inset:0;
+            opacity:0;pointer-events:none;
+            display:flex;flex-direction:column;
+            justify-content:center;align-items:center;
+            transition:opacity 0.85s ease;
         }
-        .gift-box {
-            position: relative; width: 120px; height: 100px;
-            background: #f472b6; border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(244, 114, 182, 0.3);
+        .stage.active{opacity:1;pointer-events:auto;}
+
+        /* ── COMMON CLICK-ME BUTTON ── */
+        .btn-clickme{
+            padding:12px 36px;border-radius:30px;border:none;cursor:pointer;
+            font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;
+            background:#E05252;color:#fff;letter-spacing:2px;text-transform:uppercase;
+            box-shadow:0 5px 0 #a03030,0 8px 18px rgba(224,82,82,0.3);
+            transition:transform 0.15s,box-shadow 0.15s;
         }
-        .gift-box::before {
-            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            width: 20px; height: 100%; background: #ec4899;
+        .btn-clickme:hover{transform:translateY(-3px);box-shadow:0 8px 0 #a03030,0 12px 22px rgba(224,82,82,0.4);}
+        .btn-clickme:active{transform:translateY(2px);box-shadow:0 3px 0 #a03030;}
+
+        /* =====================================================
+           STAGE 1 — Virtual Hug / Opening
+        ===================================================== */
+        #s1{
+            background:linear-gradient(160deg,#FDF8F5 0%,#FFF0F0 100%);
+            cursor:pointer;
         }
-        .gift-box::after {
-            content: ''; position: absolute; top: 50%; left: 0; transform: translateY(-50%);
-            width: 100%; height: 20px; background: #ec4899;
+        .s1-wrap{
+            display:flex;flex-direction:column;align-items:center;
+            gap:12px;padding:20px;text-align:center;width:100%;
         }
-        .gift-lid {
-            position: absolute; top: -15px; left: -5px; width: 130px; height: 25px;
-            background: #f472b6; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 2;
+        .s1-heading{
+            font-family:'Pacifico',cursive;
+            font-size:clamp(26px,6.5vw,52px);
+            color:#4A2E2B;
+            text-shadow:2px 3px 0 rgba(224,82,82,0.12);
         }
-        .gift-lid::before {
-            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            width: 20px; height: 100%; background: #ec4899;
+        .s1-hug-scene{
+            position:relative;
+            display:flex;flex-direction:column;
+            justify-content:center;align-items:center;
+            padding:16px 24px;
+            background:radial-gradient(ellipse at center,#FAD6D6 0%,#FDF8F5 70%);
+            border-radius:32px;
+            margin:6px 0;
         }
-        .bow {
-            position: absolute; top: -35px; left: 50%; transform: translateX(-50%);
-            width: 60px; height: 20px; z-index: 3; display: flex; justify-content: space-between;
+        .s1-stars{
+            display:flex;gap:18px;font-size:18px;margin-bottom:10px;
         }
-        .bow-loop { width: 28px; height: 20px; border: 4px solid #ec4899; border-radius: 50%; }
-        .gift-text {
-            margin-top: 40px; font-family: 'Inter', sans-serif; font-size: 13px;
-            letter-spacing: 4px; text-transform: uppercase; color: #be185d; opacity: 0.7; font-weight: 600;
+        .s1-gif-box{
+            position:relative;
+            border-radius:24px;
+            overflow:hidden;
+            border:5px solid #fff;
+            box-shadow:0 0 0 4px #FAD6D6,0 12px 32px rgba(224,82,82,0.22);
+            animation:gentleSway 3s ease-in-out infinite;
+        }
+        @keyframes gentleSway{
+            0%,100%{transform:rotate(-1.5deg) scale(1);}
+            50%{transform:rotate(1.5deg) scale(1.02);}
+        }
+        .s1-gif-box img{
+            display:block;
+            width:min(250px,68vw);
+            height:auto;
+            max-height:min(220px,50vh);
+            object-fit:cover;
+        }
+        .s1-footer{
+            font-family:'Nunito',sans-serif;font-weight:900;
+            font-size:clamp(22px,5vw,40px);
+            color:#E05252;letter-spacing:6px;text-transform:uppercase;
+        }
+        .s1-tap{font-size:12px;color:#c09090;letter-spacing:3px;}
+
+        /* =====================================================
+           STAGE 2 — PLS ACCEPT THE GIFT
+        ===================================================== */
+        #s2{background:linear-gradient(160deg,#FFF5F0 0%,#F5F0FF 100%);}
+        .s2-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px;text-align:center;}
+        .s2-heading{
+            font-family:'Nunito',sans-serif;font-weight:900;
+            font-size:clamp(22px,5.5vw,38px);color:#4A2E2B;letter-spacing:2px;
+        }
+        .s2-penguin-wrap{
+            position:relative;
+            margin:8px 0;
+        }
+        .s2-gif-box{
+            border-radius:24px;
+            overflow:hidden;
+            border:5px solid #fff;
+            box-shadow:0 0 0 4px #FAD6D6,0 12px 30px rgba(74,46,43,0.18);
+            animation:jumpPeng 1.6s ease-in-out infinite;
+        }
+        @keyframes jumpPeng{
+            0%,100%{transform:translateY(0) rotate(-3deg);}
+            50%{transform:translateY(-16px) rotate(3deg);}
+        }
+        .s2-gif-box img{
+            display:block;
+            width:min(190px,52vw);
+            height:auto;
+            max-height:min(190px,46vh);
+            object-fit:cover;
+        }
+        .s2-btn-row{display:flex;gap:16px;justify-content:center;margin-top:6px;}
+        .btn-yes{
+            padding:13px 46px;border-radius:30px;border:none;cursor:pointer;
+            font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;
+            background:#E05252;color:#fff;letter-spacing:3px;text-transform:uppercase;
+            box-shadow:0 6px 0 #a03030,0 8px 20px rgba(224,82,82,0.35);
+            transition:transform 0.15s,box-shadow 0.15s;
+        }
+        .btn-yes:hover{transform:translateY(-3px);}
+        .btn-yes:active{transform:translateY(3px);box-shadow:0 3px 0 #a03030;}
+        .btn-no{
+            padding:13px 36px;border-radius:30px;border:none;cursor:pointer;
+            font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;
+            background:#E05252;color:#fff;letter-spacing:3px;text-transform:uppercase;
+            box-shadow:0 6px 0 #a03030,0 8px 20px rgba(224,82,82,0.35);
+            transition:transform 0.15s,box-shadow 0.15s;
+            position:relative;
+        }
+        .btn-no:hover{transform:translateY(-3px);}
+        @keyframes wobble{0%,100%{transform:translateX(0);}25%{transform:translateX(-28px) rotate(-6deg);}75%{transform:translateX(28px) rotate(6deg);}}
+        .wobble{animation:wobble 0.55s ease both;}
+
+        /* =====================================================
+           STAGE 3 — Choose a Penguin (holding gift in hand)
+        ===================================================== */
+        #s3{background:linear-gradient(160deg,#FFF5F0 0%,#FFFCE8 100%);}
+        .s3-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px 20px;text-align:center;width:100%;}
+        .s3-heading{
+            font-family:'Pacifico',cursive;
+            font-size:clamp(24px,6vw,42px);color:#E05252;
+        }
+        .s3-sub{font-family:'Nunito',sans-serif;font-style:italic;font-size:14px;color:#7a5050;}
+        .s3-penguins{
+            display:flex;gap:18px;justify-content:center;flex-wrap:wrap;
+            max-width:580px;width:100%;margin:12px 0;
+        }
+        .s3-peng-card{
+            display:flex;flex-direction:column;align-items:center;gap:8px;
+            cursor:pointer;transition:transform 0.25s cubic-bezier(0.175,0.885,0.32,1.275);
+        }
+        .s3-peng-card:hover{transform:translateY(-8px) scale(1.08);}
+        .s3-card-box{
+            width:105px;height:105px;
+            border-radius:22px;
+            overflow:hidden;
+            border:3px solid #fff;
+            box-shadow:0 0 0 3px #FAD6D6,0 8px 22px rgba(224,82,82,0.18);
+            background:#ffffff;
+            display:flex;align-items:center;justify-content:center;
+            transition:border-color 0.25s,box-shadow 0.25s;
+        }
+        .s3-peng-card:hover .s3-card-box{
+            box-shadow:0 0 0 4px #E05252,0 12px 28px rgba(224,82,82,0.32);
+        }
+        .s3-card-box img{
+            width:100%;height:100%;object-fit:cover;display:block;
+        }
+        .s3-peng-label{
+            font-family:'Quicksand',sans-serif;font-weight:700;
+            font-size:12px;letter-spacing:2px;color:#E05252;text-transform:uppercase;
         }
 
-        /* Stage 2 - The Heart */
-        #stage2 { background: linear-gradient(135deg, #ffe4ec 0%, #ffc8d6 100%); cursor: pointer; }
-        .heart-wrapper { display: flex; flex-direction: column; align-items: center; }
-        .glowing-heart {
-            position: relative; width: 120px; height: 120px; font-size: 100px;
-            line-height: 120px; text-align: center; margin: 30px auto;
-            text-shadow: 0 10px 40px rgba(236,72,153,0.6);
-            animation: pulseHeart 2s ease-in-out infinite;
+        .box-1{border-color:#FAD6D6;}
+        .box-2{border-color:#bae6fd;}
+        .box-3{border-color:#fde68a;}
+        .box-4{border-color:#e9d5ff;}
+
+        /* =====================================================
+           STAGE 4 — HAPPY BIRTHDAY
+        ===================================================== */
+        #s4{
+            background:linear-gradient(160deg,#FFF5F0 0%,#FFFCE8 50%,#F5F0FF 100%);
+            overflow:hidden;
         }
-        .stage.active .glowing-heart {
-            animation: pulseHeart 2s ease-in-out infinite, boomEffect 0.6s 1.5s ease-out;
+        .s4-bg{position:absolute;inset:0;z-index:0;overflow:hidden;}
+        .s4-wrap{
+            position:relative;z-index:5;
+            display:flex;flex-direction:column;align-items:center;
+            gap:10px;padding:16px 20px;text-align:center;
+            width:100%;
         }
-        @keyframes boomEffect {
-            0% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0 rgba(255,255,255,0)); }
-            50% { transform: scale(1.4); filter: brightness(1.5) drop-shadow(0 0 80px rgba(255,255,255,1)); }
-            100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0 rgba(255,255,255,0)); }
+        .s4-banner{
+            font-family:'Pacifico',cursive;
+            font-size:clamp(32px,8vw,64px);
+            color:#E05252;
+            text-shadow:4px 5px 0 rgba(224,82,82,0.2),0 2px 20px rgba(224,82,82,0.1);
+            line-height:1.1;
+            opacity:0;transform:scale(0.65);
+            transition:opacity 0.6s ease 0.2s,transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275) 0.2s;
         }
-        @keyframes pulseHeart {
-            0%, 100% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.08); filter: brightness(1.2); }
+        .stage.active .s4-banner{opacity:1;transform:scale(1);}
+
+        .s4-scene{
+            display:flex;align-items:center;justify-content:center;gap:14px;
+            opacity:0;transition:opacity 0.7s ease 0.5s;
+            margin:6px 0;
         }
-        .heart-text {
-            font-family: 'Cormorant Garamond', serif; font-style: italic;
-            font-size: 22px; color: #9d174d; margin-bottom: 20px; text-align: center;
+        .stage.active .s4-scene{opacity:1;}
+
+        /* Left companion GIF */
+        .s4-companion{
+            width:min(90px,23vw);
+            border-radius:18px;
+            overflow:hidden;
+            border:3px solid #fff;
+            box-shadow:0 0 0 3px #FAD6D6,0 6px 18px rgba(0,0,0,0.1);
+            animation:jumpPeng 1.8s ease-in-out infinite;
         }
-        .cupid-arrow {
-            position: absolute; width: 120px; height: 24px; top: 50%; left: -200px;
-            opacity: 0; z-index: 10; pointer-events: none; margin-top: -12px;
-        }
-        .stage.active .cupid-arrow {
-            animation: shootArrow 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            animation-delay: 1s;
-        }
-        @keyframes shootArrow {
-            0% { left: -200px; top: -100px; transform: rotate(35deg); opacity: 0; }
-            100% { left: -20px; top: 50%; transform: rotate(35deg); opacity: 1; }
+        .s4-companion img{
+            display:block;width:100%;height:auto;object-fit:cover;
         }
 
-        /* Stage 3 - The Reveal */
-        #stage3 { background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); cursor: pointer; }
-        .reveal-text {
-            font-family: 'Playfair Display', serif; font-weight: 700; font-size: 64px; color: white;
-            text-align: center; text-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            opacity: 0; transform: translateY(30px); transition: opacity 1s ease-out, transform 1s ease-out;
+        /* Photo frame in center */
+        .s4-photo-oval{
+            position:relative;
+            width:min(145px,38vw);height:min(168px,44vw);
+            border-radius:50%;overflow:hidden;
+            border:5px solid #fff;
+            box-shadow:0 0 0 4px #FAD6D6,0 10px 32px rgba(224,82,82,0.25);
+            flex-shrink:0;
+            animation:floatPhoto 3s ease-in-out infinite;
+            opacity:0;transition:opacity 0.7s ease 0.4s;
         }
-        .stage.active .reveal-text { opacity: 1; transform: translateY(0); }
-        @media (max-width: 768px) { .reveal-text { font-size: 40px; padding: 0 20px; } }
+        .stage.active .s4-photo-oval{opacity:1;}
+        @keyframes floatPhoto{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+        .s4-photo-oval img{width:100%;height:100%;object-fit:cover;object-position:center center;}
 
-        /* Stage 4 - The Tree */
-        #stage4 { background: #fff0f5; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .tree-container {
-            position: relative; width: 100%; height: 350px;
-            display: flex; justify-content: center; align-items: flex-end; z-index: 1;
-            margin-bottom: 20px;
+        /* Right companion gift stack */
+        .s4-gifts-box{
+            width:min(85px,22vw);
+            filter:drop-shadow(0 6px 14px rgba(224,82,82,0.2));
+            animation:floatPhoto 2.6s ease-in-out 0.5s infinite;
         }
-        .tree-trunk {
-            width: 14px; height: 180px; background: linear-gradient(to right, #78350f, #92400e, #78350f);
-            border-radius: 10px 10px 0 0; transform-origin: bottom center;
-            transform: scaleY(0); transition: transform 1.5s ease-out;
-        }
-        .stage.active .tree-trunk { transform: scaleY(1); }
-        .tree-leaves {
-            position: absolute; bottom: 170px; left: 50%; transform: translateX(-50%);
-            width: 300px; height: 300px; pointer-events: none;
-        }
-        .leaf {
-            position: absolute; border-radius: 50%; opacity: 0; transform: scale(0);
-        }
-        .stage.active .leaf.bloomed { 
-            animation: leafJump 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        @keyframes leafJump {
-            0% { transform: scale(0) translateY(0); opacity: 0; }
-            50% { transform: scale(1.2) translateY(-15px); opacity: 1; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-        .tree-center-photo {
-            position: absolute; top: 120px; left: 50%; transform: translate(-50%, -50%) scale(0);
-            width: 100px; height: 100px; border-radius: 50%; object-fit: cover;
-            border: 4px solid #fff; box-shadow: 0 10px 20px rgba(236,72,153,0.3);
-            opacity: 0; z-index: 5; transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .stage.active .tree-center-photo.bloomed { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        
-        .tree-text-container { text-align: center; z-index: 10; margin-bottom: 20px; }
-        .tree-msg1 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px; color: #9d174d; opacity: 0; transition: opacity 1s ease; }
-        .tree-msg2 { font-family: 'Playfair Display', serif; font-size: 36px; color: #be185d; opacity: 0; transition: opacity 1s ease; margin: 8px 0; }
-        .tree-msg3 { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: #be185d; opacity: 0; transition: opacity 1s ease; }
-        .stage.active .tree-msg1.visible, .stage.active .tree-msg2.visible, .stage.active .tree-msg3.visible { opacity: 1; }
 
-        .btn-next {
-            background: #ec4899; color: white; font-family: 'Inter', sans-serif; font-size: 14px;
-            padding: 10px 32px; border-radius: 24px; border: none; cursor: pointer;
-            margin-top: 15px; opacity: 0; transform: translateY(10px);
-            transition: opacity 0.5s ease, transform 0.5s ease, background 0.3s;
-            box-shadow: 0 5px 15px rgba(236, 72, 153, 0.3); z-index: 10;
+        .s4-makewish{
+            font-family:'Pacifico',cursive;font-size:clamp(13px,3vw,19px);
+            color:#E05252;letter-spacing:1px;
+            opacity:0;transition:opacity 0.7s ease 0.9s;
         }
-        .stage.active .btn-next.visible { opacity: 1; transform: translateY(0); }
-        .btn-next:hover { transform: translateY(-2px) scale(1.05) !important; background: #db2777; }
+        .stage.active .s4-makewish{opacity:1;}
+        .s4-date{
+            font-family:'Quicksand',sans-serif;font-size:12px;letter-spacing:4px;color:#a07070;
+            opacity:0;transition:opacity 0.7s ease 1s;
+        }
+        .stage.active .s4-date{opacity:1;}
+        .s4-clickme{
+            opacity:0;transition:opacity 0.7s ease 1.2s;
+            margin-top:4px;
+        }
+        .stage.active .s4-clickme{opacity:1;}
 
-        /* Stage 5 - Memory Lane */
-        #stage5 { background: #fff5f8; justify-content: flex-start; padding: 60px 20px; overflow-y: auto; display: block; }
-        .memory-title {
-            font-family: 'Playfair Display', serif; font-style: italic; font-size: 42px;
-            color: #be185d; text-align: center; margin-bottom: 40px; opacity: 0;
-            transition: opacity 1s ease;
+        /* =====================================================
+           STAGE 5 — Photo Memories ("Memory Lane" Polaroid Album)
+        ===================================================== */
+        #s5{
+            background:radial-gradient(ellipse at 50% 40%,#FAD6D6 0%,#FDF8F5 65%);
+            display:block;overflow-y:auto;
         }
-        .stage.active .memory-title { opacity: 1; }
-        .masonry-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;
-            max-width: 1000px; margin: 0 auto; padding-bottom: 50px;
+        .s5-wrap{max-width:680px;margin:0 auto;padding:28px 16px 50px;text-align:center;}
+        .s5-heading{
+            font-family:'Pacifico',cursive;
+            font-size:clamp(26px,6vw,46px);color:#E05252;
+            margin-bottom:4px;
+            opacity:0;transition:opacity 0.8s ease;
         }
-        @media (max-width: 900px) { .masonry-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) { .masonry-grid { grid-template-columns: 1fr; max-width: 350px; } }
-        
-        .polaroid {
-            background: white; padding: 12px 12px 50px 12px; border-radius: 4px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            opacity: 0; transform: translateY(20px) rotate(0deg);
-            transition: opacity 0.8s ease, transform 0.8s ease, box-shadow 0.3s ease;
-            cursor: pointer;
+        .stage.active .s5-heading{opacity:1;}
+        .s5-sub{
+            font-family:'Nunito',sans-serif;font-style:italic;font-size:14px;color:#7a5050;
+            letter-spacing:1px;margin-bottom:16px;
+            opacity:0;transition:opacity 0.8s ease 0.3s;
         }
-        .polaroid:hover { z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
-        .photo-placeholder {
-            width: 100%; aspect-ratio: 1; background: #fce7f3;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 32px; color: #f472b6; border-radius: 2px;
-        }
-        /* Stage 6 - Wish Generator */
-        #stage6 { background: #fffaf0; justify-content: flex-start; padding: 60px 20px; overflow-y: auto; display: block; }
-        .wish-generator-container { max-width: 600px; margin: 0 auto; text-align: center; }
-        .sticky-notes { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
-        .sticky-note {
-            background: #fef08a; padding: 15px; border-radius: 2px;
-            box-shadow: 2px 4px 10px rgba(0,0,0,0.1); font-family: 'Cormorant Garamond', serif;
-            font-size: 18px; width: 140px; transform: rotate(-2deg); color: #854d0e;
-        }
-        .sticky-note:nth-child(2) { transform: rotate(3deg); background: #fde047; }
-        .sticky-note:nth-child(3) { transform: rotate(-1deg); }
-        .input-group { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .name-input {
-            width: 100%; padding: 15px; border: 2px solid #fbcfe8; border-radius: 8px;
-            font-family: 'Inter', sans-serif; font-size: 16px; margin-bottom: 20px; outline: none;
-            text-align: center;
-        }
-        .name-input:focus { border-color: #f472b6; }
-        .btn-generate {
-            background: linear-gradient(135deg, #fcd34d, #f59e0b); color: white;
-            font-family: 'Inter', sans-serif; font-weight: 600; font-size: 16px;
-            padding: 15px 40px; border-radius: 30px; border: none; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3); transition: transform 0.3s;
-        }
-        .btn-generate:hover { transform: scale(1.05); }
-        .wish-result-card {
-            margin-top: 30px; padding: 25px; background: white; border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: none; opacity: 0; transition: opacity 0.5s;
-        }
-        .wish-text-display { font-family: 'Playfair Display', serif; font-size: 24px; color: #be185d; margin-bottom: 25px; line-height: 1.4; }
-        .wish-text-display { font-family: 'Playfair Display', serif; font-size: 24px; color: #be185d; margin-bottom: 25px; line-height: 1.4; }
-        
-        .btn-to-wish {
-            background: #be185d; color: white; font-family: 'Inter', sans-serif; font-size: 14px;
-            padding: 12px 32px; border-radius: 24px; border: none; cursor: pointer;
-            margin: 40px auto 20px auto; display: block; opacity: 0; transition: opacity 1s ease, transform 0.3s;
-        }
-        .btn-to-wish:hover { transform: scale(1.05); background: #9d174d; }
-        .stage.active .btn-to-wish { opacity: 1; }
+        .stage.active .s5-sub{opacity:1;}
 
-        .music-btn {
-            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
-            background: rgba(255, 255, 255, 0.8); border: none; border-radius: 50%;
-            font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            z-index: 1000; display: flex; justify-content: center; align-items: center;
-            transition: transform 0.3s;
+        .s5-datestamp{
+            font-family:'Quicksand',sans-serif;font-weight:700;font-size:15px;
+            color:#E05252;letter-spacing:5px;margin-bottom:16px;
+            opacity:0;transition:opacity 0.7s ease 0.5s;
         }
-        .music-btn:hover { transform: scale(1.1); }
-        .music-btn.playing { animation: pulseMusic 2s infinite; }
-        @keyframes pulseMusic { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .stage.active .s5-datestamp{opacity:1;}
+
+        /* Classic Polaroid Gallery Grid (Properly Framed & Centered) */
+        .polaroid-grid{
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:22px;
+            max-width:580px;
+            margin:0 auto 26px;
+            padding:10px 4px;
+        }
+        @media(max-width:520px){
+            .polaroid-grid{grid-template-columns:1fr;max-width:300px;}
+        }
+
+        .polaroid-card{
+            background:#ffffff;
+            padding:12px 12px 42px 12px;
+            border-radius:6px;
+            box-shadow:0 8px 24px rgba(74,46,43,0.12),0 2px 6px rgba(0,0,0,0.06);
+            position:relative;
+            cursor:pointer;
+            transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275),box-shadow 0.3s ease;
+            opacity:0;
+            transform:translateY(20px);
+        }
+        .stage.active .polaroid-card:nth-child(1){opacity:1;transform:rotate(-2.5deg);transition-delay:0.3s;}
+        .stage.active .polaroid-card:nth-child(2){opacity:1;transform:rotate(2.5deg);transition-delay:0.45s;}
+        .stage.active .polaroid-card:nth-child(3){opacity:1;transform:rotate(1.8deg);transition-delay:0.6s;}
+        .stage.active .polaroid-card:nth-child(4){opacity:1;transform:rotate(-2deg);transition-delay:0.75s;}
+
+        .polaroid-card:hover{
+            transform:scale(1.05) rotate(0deg) !important;
+            box-shadow:0 16px 36px rgba(224,82,82,0.22);
+            z-index:10;
+        }
+
+        /* Decorative washi tape on top of polaroids */
+        .polaroid-tape{
+            position:absolute;
+            top:-9px;
+            left:50%;
+            transform:translateX(-50%);
+            width:56px;
+            height:17px;
+            background:rgba(250,214,214,0.88);
+            border-left:2px dashed rgba(224,82,82,0.35);
+            border-right:2px dashed rgba(224,82,82,0.35);
+            border-radius:2px;
+        }
+
+        .polaroid-img-wrap{
+            width:100%;
+            height:220px;
+            border-radius:4px;
+            overflow:hidden;
+            background:#FFF8F5;
+        }
+        .polaroid-img-wrap img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            object-position:center center;
+            display:block;
+        }
+
+        .polaroid-caption{
+            position:absolute;
+            bottom:11px;
+            left:0;
+            right:0;
+            text-align:center;
+            font-family:'Pacifico',cursive;
+            font-size:15px;
+            color:#4A2E2B;
+            letter-spacing:0.5px;
+        }
+
+        /* =====================================================
+           STAGE 6 — Wish Generator
+        ===================================================== */
+        #s6{
+            background:linear-gradient(160deg,#FFF5F0 0%,#F5F0FF 100%);
+            display:block;overflow-y:auto;
+        }
+        .s6-wrap{max-width:560px;margin:0 auto;padding:34px 18px 70px;text-align:center;}
+        .s6-heading{font-family:'Pacifico',cursive;font-size:clamp(24px,5.5vw,42px);color:#E05252;margin-bottom:6px;}
+        .s6-sub{font-family:'Nunito',sans-serif;font-style:italic;font-size:13px;color:#7a5050;letter-spacing:1px;margin-bottom:18px;}
+
+        .s6-penguin{display:flex;justify-content:center;margin-bottom:16px;}
+        .s6-gif-box{
+            border-radius:22px;overflow:hidden;border:4px solid #fff;
+            box-shadow:0 0 0 3px #FAD6D6,0 10px 24px rgba(74,46,43,0.16);
+            animation:jumpPeng 2s ease-in-out infinite;
+        }
+        .s6-gif-box img{
+            display:block;width:min(125px,32vw);height:auto;object-fit:cover;
+        }
+
+        .sticky-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+        .sticky{padding:11px 13px;border-radius:4px;font-family:'Nunito',sans-serif;font-size:13px;
+            font-style:italic;color:#854d0e;width:140px;box-shadow:3px 5px 12px rgba(0,0,0,0.1);transform:rotate(var(--r));}
+        .sticky:nth-child(1){background:#fef08a;--r:-3deg;}
+        .sticky:nth-child(2){background:#fde047;--r:2.5deg;}
+        .sticky:nth-child(3){background:#fef08a;--r:-1.5deg;}
+
+        .input-box{background:#fff;border-radius:18px;padding:22px;box-shadow:0 6px 28px rgba(224,82,82,0.1);border:2px solid #FAD6D6;}
+        .name-input{width:100%;padding:12px 15px;background:#FFF8F5;border:2px solid #FAD6D6;border-radius:11px;color:#4A2E2B;font-family:'Nunito',sans-serif;font-size:15px;margin-bottom:14px;outline:none;text-align:center;transition:border-color 0.3s;font-weight:700;}
+        .name-input::placeholder{color:#c09090;}
+        .name-input:focus{border-color:#E05252;}
+        .btn-gen{padding:13px 38px;border-radius:30px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;background:#E05252;color:#fff;letter-spacing:1px;box-shadow:0 6px 0 #a03030,0 8px 20px rgba(224,82,82,0.3);transition:transform 0.2s;}
+        .btn-gen:hover{transform:scale(1.05);}
+        .wish-card{margin-top:20px;padding:20px;border-radius:14px;background:linear-gradient(135deg,#FFF8F5,#FFF5FF);border:2px solid #FAD6D6;display:none;opacity:0;transition:opacity 0.5s;}
+        .wish-text{font-family:'Nunito',sans-serif;font-size:clamp(14px,3vw,19px);color:#4A2E2B;line-height:1.6;font-weight:700;margin-bottom:6px;}
+        .wish-from{font-family:'Nunito',sans-serif;font-style:italic;font-size:12px;color:#c09090;}
+
+        /* MUSIC BTN */
+        .music-btn{position:fixed;bottom:18px;right:18px;width:44px;height:44px;background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);border:2px solid #FAD6D6;border-radius:50%;font-size:19px;cursor:pointer;box-shadow:0 4px 14px rgba(224,82,82,0.15);z-index:1000;display:flex;justify-content:center;align-items:center;transition:transform 0.3s;}
+        .music-btn:hover{transform:scale(1.12);}
+        .music-btn.playing{animation:spin 3s linear infinite;}
+        @keyframes spin{to{transform:rotate(360deg);}}
+
+        @media(max-width:480px){
+            .s3-card-box{width:86px;height:86px;}
+            .polaroid-img-wrap{height:190px;}
+        }
     </style>
 </head>
 <body>
 
-    <div id="particles"></div>
+<!-- =====================================================
+     STAGE 1 — Virtual Hug / Opening
+===================================================== -->
+<div id="s1" class="stage active" onclick="nextStage(2)">
+    <div class="s1-wrap">
+        <div class="s1-heading">Virtual hug for ya!</div>
 
-    <!-- Stage 1 -->
-    <div id="stage1" class="stage active" onclick="nextStage(2)">
-        <div class="gift-wrapper">
-            <div class="gift-box">
-                <div class="gift-lid"></div>
-                <div class="bow">
-                    <div class="bow-loop"></div>
-                    <div class="bow-loop"></div>
-                </div>
+        <div class="s1-hug-scene">
+            <div class="s1-stars">
+                <span style="color:#E05252;font-size:20px;">&#10022;</span>
+                <span style="color:#FAD6D6;font-size:14px;">&#10022;</span>
+                <span style="color:#f59e0b;font-size:18px;">&#11088;</span>
+                <span style="color:#FAD6D6;font-size:14px;">&#10022;</span>
+                <span style="color:#E05252;font-size:20px;">&#10022;</span>
             </div>
-            <div class="gift-text">Pull & Release</div>
+            
+            <!-- Teddy Bears Hugging Animated GIF -->
+            <div class="s1-gif-box">
+                <img src="image/teddy_hug.gif" onerror="this.onerror=null;this.src='https://media.tenor.com/fxXBctCk528AAAAM/hug-hugs-and-love.gif'" alt="Teddy Bears Hugging">
+            </div>
+        </div>
+
+        <div class="s1-footer">I MISS YOU</div>
+        <div class="s1-tap">tap anywhere to continue</div>
+        <button class="btn-clickme" style="margin-top:4px;" onclick="nextStage(2)">CLICK ME</button>
+    </div>
+</div>
+
+<!-- =====================================================
+     STAGE 2 — Pls Accept The Gift (Penguin)
+===================================================== -->
+<div id="s2" class="stage">
+    <div class="s2-wrap">
+        <div class="s2-heading">PLS ACCEPT THE GIFT</div>
+
+        <!-- Jumping Pudgy Penguin Animated GIF -->
+        <div class="s2-penguin-wrap">
+            <div class="s2-gif-box">
+                <img src="image/pengu_pudgy.gif" onerror="this.onerror=null;this.src='https://media.tenor.com/z6fDUwLsH4AAAAAM/pengu-pudgy.gif'" alt="Pudgy Penguin">
+            </div>
+        </div>
+
+        <div class="s2-btn-row">
+            <button class="btn-yes" onclick="handleYes()">YES</button>
+            <button class="btn-no" id="btnNo" onclick="handleNo()">NO</button>
         </div>
     </div>
+</div>
 
-    <!-- Stage 2 -->
-    <div id="stage2" class="stage" onclick="nextStage(3)">
-        <div class="heart-wrapper">
-            <div class="heart-text">a little something for you</div>
-            <div class="glowing-heart">
-                ❤️
-                <svg class="cupid-arrow" viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="10" y1="10" x2="90" y2="10" stroke="#be185d" stroke-width="3" stroke-linecap="round"/>
-                    <polygon points="85,4 100,10 85,16" fill="#be185d"/>
-                    <line x1="10" y1="10" x2="0" y2="4" stroke="#be185d" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="10" y1="10" x2="0" y2="16" stroke="#be185d" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="20" y1="10" x2="10" y2="4" stroke="#be185d" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="20" y1="10" x2="10" y2="16" stroke="#be185d" stroke-width="2" stroke-linecap="round"/>
+<!-- =====================================================
+     STAGE 3 — Choose a Penguin (holding gift in hand)
+===================================================== -->
+<div id="s3" class="stage">
+    <div class="s3-wrap">
+        <div class="s3-heading">Choose a penguin</div>
+        <div class="s3-sub">Each one has something special to say...</div>
+
+        <div class="s3-penguins">
+            <!-- Penguin 1: Gift in hand -->
+            <div class="s3-peng-card" onclick="pickPenguin(1)">
+                <div class="s3-card-box box-1">
+                    <img src="image/pengu_gift.gif" onerror="this.onerror=null;this.src='https://media1.giphy.com/media/9qWJ2bpJXZMXxJ9bTJ/giphy.gif'" alt="Penguin with Gift 1">
+                </div>
+                <div class="s3-peng-label">MEMORY 1</div>
+            </div>
+
+            <!-- Penguin 2: Gift in hand -->
+            <div class="s3-peng-card" onclick="pickPenguin(2)">
+                <div class="s3-card-box box-2">
+                    <img src="image/pengu_gift.gif" onerror="this.onerror=null;this.src='https://media1.giphy.com/media/9qWJ2bpJXZMXxJ9bTJ/giphy.gif'" alt="Penguin with Gift 2">
+                </div>
+                <div class="s3-peng-label">MEMORY 2</div>
+            </div>
+
+            <!-- Penguin 3: Gift in hand -->
+            <div class="s3-peng-card" onclick="pickPenguin(3)">
+                <div class="s3-card-box box-3">
+                    <img src="image/pengu_gift.gif" onerror="this.onerror=null;this.src='https://media1.giphy.com/media/9qWJ2bpJXZMXxJ9bTJ/giphy.gif'" alt="Penguin with Gift 3">
+                </div>
+                <div class="s3-peng-label">MEMORY 3</div>
+            </div>
+
+            <!-- Penguin 4: Gift in hand -->
+            <div class="s3-peng-card" onclick="pickPenguin(4)">
+                <div class="s3-card-box box-4">
+                    <img src="image/pengu_gift.gif" onerror="this.onerror=null;this.src='https://media1.giphy.com/media/9qWJ2bpJXZMXxJ9bTJ/giphy.gif'" alt="Penguin with Gift 4">
+                </div>
+                <div class="s3-peng-label">MEMORY 4</div>
+            </div>
+        </div>
+        <div class="s3-hint" style="font-size:12px;color:#c09090;letter-spacing:1px;">&#8593; tap any penguin &#8593;</div>
+    </div>
+</div>
+
+<!-- =====================================================
+     STAGE 4 — HAPPY BIRTHDAY
+===================================================== -->
+<div id="s4" class="stage">
+    <div class="s4-bg" id="s4bg"></div>
+    <div class="s4-wrap">
+        <div class="s4-banner">HAPPY<br>BIRTHDAY</div>
+        <div class="s4-makewish">&#10022; MAKE A WISH &#10022;</div>
+
+        <!-- Three-panel scene: Cute Penguin GIF | photo | gifts -->
+        <div class="s4-scene">
+            <!-- Left: Cute Penguin Animated GIF -->
+            <div class="s4-companion">
+                <img src="image/pengu_cute.gif" onerror="this.onerror=null;this.src='https://media.tenor.com/ITtPYeOZKpYAAAAM/aw-its-so-cute.gif'" alt="Celebrating Penguin">
+            </div>
+
+            <!-- Center: Selected photo in oval frame -->
+            <div class="s4-photo-oval" id="s4photoOval">
+                <img src="image/photo2_card.jpeg" id="s4img" alt="Birthday Photo">
+            </div>
+
+            <!-- Right: Stacked gift boxes -->
+            <div class="s4-gifts-box">
+                <svg width="80" height="110" viewBox="0 0 80 110" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Gift 1 (top) -->
+                    <rect x="22" y="4" width="36" height="28" rx="4" fill="#a5f3fc" stroke="#22d3ee" stroke-width="1.5"/>
+                    <rect x="18" y="0" width="44" height="9" rx="4" fill="#22d3ee"/>
+                    <line x1="40" y1="0" x2="40" y2="32" stroke="#22d3ee" stroke-width="2.5"/>
+                    <line x1="18" y1="4.5" x2="62" y2="4.5" stroke="#22d3ee" stroke-width="2.5"/>
+                    <ellipse cx="33" cy="-1" rx="8" ry="5" fill="#22d3ee" transform="rotate(-25,33,-1)"/>
+                    <ellipse cx="47" cy="-1" rx="8" ry="5" fill="#22d3ee" transform="rotate(25,47,-1)"/>
+                    <circle cx="40" cy="0" r="4" fill="#a5f3fc"/>
+                    <!-- Gift 2 (middle) -->
+                    <rect x="10" y="36" width="60" height="40" rx="5" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+                    <rect x="6" y="30" width="68" height="12" rx="5" fill="#f59e0b"/>
+                    <line x1="40" y1="30" x2="40" y2="76" stroke="#f59e0b" stroke-width="3"/>
+                    <line x1="6" y1="36" x2="74" y2="36" stroke="#f59e0b" stroke-width="3"/>
+                    <ellipse cx="28" cy="27" rx="12" ry="7" fill="#f59e0b" transform="rotate(-20,28,27)"/>
+                    <ellipse cx="52" cy="27" rx="12" ry="7" fill="#f59e0b" transform="rotate(20,52,27)"/>
+                    <circle cx="40" cy="30" r="5" fill="#fde68a"/>
+                    <!-- Gift 3 (base) -->
+                    <rect x="4" y="78" width="72" height="28" rx="5" fill="#FAD6D6" stroke="#E05252" stroke-width="2"/>
+                    <rect x="0" y="72" width="80" height="11" rx="5" fill="#E05252"/>
+                    <line x1="40" y1="72" x2="40" y2="106" stroke="#E05252" stroke-width="3"/>
+                    <line x1="0" y1="77" x2="80" y2="77" stroke="#E05252" stroke-width="3"/>
+                    <ellipse cx="26" cy="69" rx="14" ry="9" fill="#E05252" transform="rotate(-20,26,69)"/>
+                    <ellipse cx="54" cy="69" rx="14" ry="9" fill="#E05252" transform="rotate(20,54,69)"/>
+                    <circle cx="40" cy="72" r="6" fill="#FAD6D6"/>
                 </svg>
             </div>
         </div>
-    </div>
 
-    <!-- Stage 3 -->
-    <div id="stage3" class="stage" onclick="nextStage(4)">
-        <div class="reveal-text">
-            Happy Birthday<br>
-            <span style="font-size: 48px; font-family: 'Cormorant Garamond', serif; font-style: italic;">Thamanna Zainab</span><br>
-            <span style="font-size: 18px; font-family: 'Inter', sans-serif; letter-spacing: 2px; font-weight: 400; display: block; margin-top: 15px;">17.09.2026  •  @zxynxb_06</span>
-        </div>
+        <div class="s4-date">17 &nbsp;&#8226;&nbsp; 09 &nbsp;&#8226;&nbsp; 2026</div>
+        <button class="btn-clickme s4-clickme" id="btnS4Next" onclick="nextStage(5)">CLICK ME</button>
     </div>
+</div>
 
-    <!-- Stage 4 -->
-    <div id="stage4" class="stage">
-        <div class="tree-container">
-            <div class="tree-leaves" id="treeLeaves">
-                <img src="image/photo2.jpeg" class="tree-center-photo" id="treeCenterPhoto">
+<!-- =====================================================
+     STAGE 5 — Photo Memories ("Memory Lane" Polaroid Album)
+===================================================== -->
+<div id="s5" class="stage">
+    <div class="s5-wrap">
+        <div class="s5-heading">Memory Lane</div>
+        <div class="s5-sub">&#8212; these moments tell your beautiful story &#8212;</div>
+        <div class="s5-datestamp">17 &nbsp;&#8226;&nbsp; 09 &nbsp;&#8226;&nbsp; 2026</div>
+
+        <!-- Classic Polaroid Photo Grid (Faces Perfectly Framed & Centered) -->
+        <div class="polaroid-grid">
+            <!-- Photo 1: Upright Garden Memory -->
+            <div class="polaroid-card">
+                <div class="polaroid-tape"></div>
+                <div class="polaroid-img-wrap">
+                    <img src="image/photo1_card.jpeg" alt="Memory 1">
+                </div>
+                <div class="polaroid-caption">Precious Moments</div>
             </div>
-            <div class="tree-trunk"></div>
-        </div>
-        <div class="tree-text-container">
-            <div class="tree-msg1" id="msg1">and... make it count.</div>
-            <div class="tree-msg2" id="msg2">Happy Birthday Thamanna Zainab.</div>
-            <div class="tree-msg3" id="msg3">Here is to a year that blooms</div>
-        </div>
-        <button class="btn-next" id="btnNext" onclick="nextStage(5)">Next</button>
-    </div>
 
-    <!-- Stage 5 -->
-    <div id="stage5" class="stage">
-        <h2 class="memory-title">Memory Lane</h2>
-        <div class="masonry-grid" id="masonryGrid">
-            <!-- 6 polaroids will be injected via JS -->
-        </div>
-        <button class="btn-to-wish" onclick="nextStage(6)">Make a Wish ✨</button>
-    </div>
+            <!-- Photo 2: Outdoor Smile (Face Perfectly Centered) -->
+            <div class="polaroid-card">
+                <div class="polaroid-tape"></div>
+                <div class="polaroid-img-wrap">
+                    <img src="image/photo2_card.jpeg" alt="Memory 2">
+                </div>
+                <div class="polaroid-caption">Pure Joy</div>
+            </div>
 
-    <!-- Stage 6 -->
-    <div id="stage6" class="stage">
-        <div class="wish-generator-container">
-            <h2 class="memory-title" style="margin-bottom: 40px; font-size: 36px;">Wish Generator</h2>
-            <div class="sticky-notes">
-                <div class="sticky-note">"Wishing you endless joy!"</div>
-                <div class="sticky-note">"May your day shine bright."</div>
-                <div class="sticky-note">"Here is to a great year!"</div>
+            <!-- Photo 3: Radiant Portrait (Face Perfectly Centered) -->
+            <div class="polaroid-card">
+                <div class="polaroid-tape"></div>
+                <div class="polaroid-img-wrap">
+                    <img src="image/photo3_card.jpeg" alt="Memory 3">
+                </div>
+                <div class="polaroid-caption">Radiant Smile</div>
             </div>
-            <div class="input-group">
-                <input type="text" id="wishName" class="name-input" placeholder="Enter birthday person's name...">
-                <button class="btn-generate" onclick="generateWish()">Generate Wish</button>
-            </div>
-            
-            <div id="wishResultCard" class="wish-result-card">
-                <div id="wishTextDisplay" class="wish-text-display"></div>
+
+            <!-- Photo 4: Celebration Portrait -->
+            <div class="polaroid-card">
+                <div class="polaroid-tape"></div>
+                <div class="polaroid-img-wrap">
+                    <img src="image/photo4_card.jpeg" alt="Memory 4">
+                </div>
+                <div class="polaroid-caption">Grace &amp; Beauty</div>
             </div>
         </div>
+
+        <button class="btn-clickme" onclick="nextStage(6)">MAKE A WISH &#10024;</button>
     </div>
+</div>
 
-    <!-- Music Player Placeholder -->
-    <audio id="bgMusic" src="" loop></audio>
-    <button id="musicBtn" class="music-btn" onclick="toggleMusic()">🎵</button>
+<!-- =====================================================
+     STAGE 6 — Wish Generator
+===================================================== -->
+<div id="s6" class="stage">
+    <div class="s6-wrap">
+        <div class="s6-heading">Make a Wish!</div>
+        <div class="s6-sub">craft a special birthday wish below</div>
 
-    <script>
-        // Particles setup
-        const particlesContainer = document.getElementById('particles');
-        const colors = ['#f472b6', '#fb7185', '#fbcfe8', '#fce7f3'];
-        for(let i=0; i<40; i++) {
-            const p = document.createElement('div');
-            p.classList.add('particle');
-            const size = Math.random() * 8 + 4;
-            p.style.width = size + 'px';
-            p.style.height = size + 'px';
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.background = colors[Math.floor(Math.random() * colors.length)];
-            p.style.animationDuration = (Math.random() * 15 + 10) + 's';
-            p.style.animationDelay = (Math.random() * 10) + 's';
-            p.style.setProperty('--max-opacity', Math.random() * 0.25 + 0.15);
-            p.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
-            particlesContainer.appendChild(p);
-        }
+        <!-- Penguin with animated GIF -->
+        <div class="s6-penguin">
+            <div class="s6-gif-box">
+                <img src="image/pengu_pudgy.gif" onerror="this.onerror=null;this.src='https://media.tenor.com/z6fDUwLsH4AAAAAM/pengu-pudgy.gif'" alt="Pudgy Penguin">
+            </div>
+        </div>
 
-        // Music Logic
-        const bgMusic = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicBtn');
-        let isPlaying = false;
-        function toggleMusic() {
-            if(!bgMusic.src || bgMusic.src.endsWith(window.location.host + '/') || bgMusic.src.endsWith('index.html')) {
-                alert("Please add your song file to the 'src' attribute of the audio tag in index.html!");
-                return;
-            }
-            if(isPlaying) {
-                bgMusic.pause();
-                musicBtn.classList.remove('playing');
-            } else {
-                bgMusic.play();
-                musicBtn.classList.add('playing');
-            }
-            isPlaying = !isPlaying;
-        }
+        <div class="sticky-row">
+            <div class="sticky">"Wishing you endless joy!"</div>
+            <div class="sticky">"May your day shine bright."</div>
+            <div class="sticky">"Here is to a great year!"</div>
+        </div>
+        <div class="input-box">
+            <input type="text" id="wishName" class="name-input" placeholder="Enter birthday person's name..." value="Thamanna Zainab">
+            <button class="btn-gen" onclick="generateWish()">Generate Wish &#127881;</button>
+            <div id="wishCard" class="wish-card">
+                <div id="wishText" class="wish-text"></div>
+                <div class="wish-from">&#8212; with joy, always &#127800;</div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        // Stage Management
-        let currentStage = 1;
-        let stageTimeout;
+<audio id="bgMusic" src="" loop></audio>
+<button id="musicBtn" class="music-btn" onclick="toggleMusic()">&#127925;</button>
 
-        function nextStage(targetStage) {
-            if(targetStage <= currentStage) return;
-            clearTimeout(stageTimeout);
-            
-            document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
-            document.getElementById('stage' + targetStage).classList.add('active');
-            currentStage = targetStage;
+<script>
+// ── FLOATING DOTS ──────────────────────────────────────
+var dotColors=['#FAD6D6','#fde68a','#c8e8ff','#c8ffd0','#e9d5ff'];
+for(var d=0;d<20;d++){
+    var dot=document.createElement('div');
+    dot.className='fdot';
+    var sz=Math.random()*12+6;
+    dot.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*96+'vw;top:'+Math.random()*90+'vh;background:'+dotColors[Math.floor(Math.random()*dotColors.length)]+';opacity:0.45;';
+    dot.style.setProperty('--fd',(Math.random()*4+3)+'s');
+    dot.style.setProperty('--fdl',(Math.random()*5)+'s');
+    document.body.appendChild(dot);
+}
 
-            if (currentStage === 2) {
-                stageTimeout = setTimeout(() => nextStage(3), 2500);
-            } else if (currentStage === 3) {
-                stageTimeout = setTimeout(() => nextStage(4), 2500);
-            } else if (currentStage === 4) {
-                initTree();
-            } else if (currentStage === 5) {
-                initMemoryLane();
-            } else if (currentStage === 6) {
-                document.body.style.overflow = 'auto';
-            }
-        }
+// ── STAGE MANAGEMENT ───────────────────────────────────
+var cur=1;
+function nextStage(t){
+    if(t<=cur)return;
+    document.querySelectorAll('.stage').forEach(function(s){s.classList.remove('active');});
+    document.getElementById('s'+t).classList.add('active');
+    cur=t;
+    if(cur===5||cur===6){document.body.style.overflow='auto';}
+    if(cur===4){initS4();}
+}
 
-        // Stage 4: Tree Heart-Blooming Logic
-        function initTree() {
-            const leavesContainer = document.getElementById('treeLeaves');
-            if(leavesContainer.children.length > 1) return;
+// ── STAGE 2 ────────────────────────────────────────────
+function handleYes(){burstConfetti();setTimeout(function(){nextStage(3);},700);}
+function handleNo(){
+    var b=document.getElementById('btnNo');
+    b.classList.remove('wobble');void b.offsetWidth;b.classList.add('wobble');
+    var dir=(Math.random()>0.5?1:-1)*(Math.random()*90+40);
+    b.style.position='relative';b.style.left=dir+'px';
+    setTimeout(function(){b.style.left='0px';},700);
+}
 
-            const leafColors = ['#f472b6', '#fb7185', '#fbbf24', '#fcd34d'];
-            const numLeaves = 100;
-            const centerX = 150; 
-            const centerY = 150;
-            const scale = 8; 
+// ── STAGE 3: Penguin Picker (Gift in Hand) ──────────────
+var picSrc='image/photo2_card.jpeg';
+var picMap={1:'image/photo1_card.jpeg',2:'image/photo2_card.jpeg',3:'image/photo3_card.jpeg',4:'image/photo4_card.jpeg'};
 
-            for(let i=0; i<numLeaves; i++) {
-                const t = Math.PI * 2 * (i / numLeaves);
-                const randOffset = (Math.random() - 0.5) * 20; 
-                
-                const x = 16 * Math.pow(Math.sin(t), 3);
-                const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+function pickPenguin(n){
+    picSrc=picMap[n];
+    burstConfetti();
+    setTimeout(function(){nextStage(4);},600);
+}
 
-                const finalX = centerX + x * scale + randOffset;
-                const finalY = centerY + y * scale + randOffset;
+// ── STAGE 4 ────────────────────────────────────────────
+function initS4(){
+    document.getElementById('s4img').src=picSrc;
+    // floating bubbles
+    var bg=document.getElementById('s4bg');
+    bg.innerHTML='';
+    var bc=['#FAD6D6','#fde68a','#c8e8ff','#c8ffd0','#e9d5ff','#fcd34d'];
+    for(var i=0;i<50;i++){
+        var b=document.createElement('div');
+        var sz2=Math.random()*14+6;
+        b.style.cssText='position:absolute;border-radius:50%;pointer-events:none;width:'+sz2+'px;height:'+sz2+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;background:'+bc[Math.floor(Math.random()*bc.length)]+';opacity:0.5;animation:bub '+(Math.random()*5+3)+'s ease-in-out '+(Math.random()*6)+'s infinite;';
+        bg.appendChild(b);
+    }
+    var ks=document.getElementById('bubkeys');
+    if(!ks){
+        ks=document.createElement('style');
+        ks.id='bubkeys';
+        ks.textContent='@keyframes bub{0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}';
+        document.head.appendChild(ks);
+    }
+}
 
-                const leaf = document.createElement('div');
-                leaf.classList.add('leaf');
-                leaf.style.left = finalX + 'px';
-                leaf.style.top = finalY + 'px';
-                
-                const size = Math.random() * 15 + 8;
-                leaf.style.width = size + 'px';
-                leaf.style.height = size + 'px';
-                leaf.style.background = leafColors[Math.floor(Math.random() * leafColors.length)];
-                
-                const delay = 1000 + (Math.random() * 1500);
-                leaf.style.animationDelay = delay + 'ms';
-                
-                leavesContainer.appendChild(leaf);
-                
-                setTimeout(() => { leaf.classList.add('bloomed'); }, 50);
-            }
+// ── CONFETTI BURST ─────────────────────────────────────
+function burstConfetti(){
+    var cc=['#E05252','#f59e0b','#67e8f9','#4ade80','#fde047','#fca5a5','#c084fc'];
+    for(var i=0;i<90;i++){
+        var el=document.createElement('div');
+        el.className='cp';
+        var ang=Math.random()*360,d=Math.random()*65+28;
+        el.style.width=(Math.random()*10+6)+'px';
+        el.style.height=(Math.random()*10+6)+'px';
+        el.style.left=(33+Math.random()*34)+'vw';
+        el.style.top=(33+Math.random()*34)+'vh';
+        el.style.background=cc[Math.floor(Math.random()*cc.length)];
+        el.style.borderRadius=Math.random()>0.5?'50%':'3px';
+        el.style.setProperty('--cd',(Math.random()*1.4+2.2)+'s');
+        el.style.setProperty('--cdl',(Math.random()*0.5)+'s');
+        el.style.setProperty('--cx',(Math.cos(ang*Math.PI/180)*d*2.8)+'vw');
+        el.style.setProperty('--cy',(Math.sin(ang*Math.PI/180)*d)+'vh');
+        el.style.setProperty('--cr',(Math.random()*1000-500)+'deg');
+        document.body.appendChild(el);
+        (function(e){setTimeout(function(){e.remove();},5000);})(el);
+    }
+}
 
-            // Pop photo in center
-            setTimeout(() => {
-                const centerPhoto = document.getElementById('treeCenterPhoto');
-                if(centerPhoto) centerPhoto.classList.add('bloomed');
-            }, 3000);
+// Auto confetti on load
+setTimeout(function(){burstConfetti();},600);
+setTimeout(function(){burstConfetti();},2000);
 
-            setTimeout(() => { document.getElementById('msg1').classList.add('visible'); }, 3500);
-            setTimeout(() => { document.getElementById('msg2').classList.add('visible'); }, 4100);
-            setTimeout(() => { document.getElementById('msg3').classList.add('visible'); }, 4700);
-            setTimeout(() => { document.getElementById('btnNext').classList.add('visible'); }, 5300);
-        }
+// ── MUSIC ──────────────────────────────────────────────
+var bm=document.getElementById('bgMusic'),mb=document.getElementById('musicBtn'),mp=false;
+function toggleMusic(){
+    if(!bm.src||bm.src.endsWith(window.location.host+'/')||bm.src.endsWith('index.html')){
+        alert("Add your song file to the audio src attribute in index.html!");return;
+    }
+    if(mp){bm.pause();mb.classList.remove('playing');}else{bm.play();mb.classList.add('playing');}mp=!mp;
+}
 
-        // Stage 5: Memory Lane Masonry Logic
-        function initMemoryLane() {
-            const grid = document.getElementById('masonryGrid');
-            if(grid.children.length > 0) return;
-
-            for(let i=0; i<3; i++) {
-                const rotation = (Math.random() * 6 - 3).toFixed(1);
-                
-                const card = document.createElement('div');
-                card.classList.add('polaroid');
-                
-                // Apply rotation initially, reset on hover is handled by CSS
-                card.style.transform = `translateY(20px) rotate(${rotation}deg)`;
-                
-                // Keep track of base rotation to restore when unhovered
-                card.addEventListener('mouseenter', () => {
-                    card.style.transform = `scale(1.03) rotate(0deg)`;
-                });
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = `translateY(0px) rotate(${rotation}deg)`;
-                });
-
-                const imgNum = (i % 3) + 1;
-                card.innerHTML = `
-                    <div style="width: 100%; aspect-ratio: 1; border-radius: 2px; overflow: hidden; background: #fce7f3; display: flex; justify-content: center; align-items: center; font-size: 32px; color: #f472b6;">
-                        <img src="image/photo${imgNum}.jpeg" alt="Memory" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentNode.innerHTML='📷';">
-                    </div>
-                `;
-                
-                grid.appendChild(card);
-                
-                setTimeout(() => {
-                    card.style.opacity = '1';
-                    card.style.transform = `translateY(0px) rotate(${rotation}deg)`;
-                }, 300 + (i * 150));
-            }
-            
-            // Allow scrolling on this stage
-            document.body.style.overflow = 'auto';
-        }
-
-        // Stage 6: Wish Generator Logic
-        const wishes = [
-            "Happy Birthday, {name}! May your day shine as bright as you do 🎂✨",
-            "Wishing you a fantastic birthday, {name}! May all your dreams come true! 🌟🎈",
-            "Happy Birthday {name}! Here's to another year of amazing adventures and sweet memories! 🎁❤️",
-            "Sending you the biggest hug on your special day, {name}! Have a blast! 🎉🥳",
-            "{name}, you make the world a better place just by being in it. Happy Birthday! 💖🎂"
-        ];
-        let currentWish = "";
-
-        function generateWish() {
-            const name = document.getElementById('wishName').value.trim();
-            const resultCard = document.getElementById('wishResultCard');
-            const display = document.getElementById('wishTextDisplay');
-            
-            if(name) {
-                const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
-                currentWish = randomWish.replace(/{name}/g, name);
-                
-                display.innerHTML = currentWish;
-                resultCard.style.display = 'block';
-                setTimeout(() => { resultCard.style.opacity = '1'; }, 50);
-                
-                // Fire some quick particles
-                for(let i=0; i<30; i++) {
-                    const p = document.createElement('div');
-                    p.classList.add('particle');
-                    const size = Math.random() * 8 + 4;
-                    p.style.width = size + 'px'; p.style.height = size + 'px';
-                    p.style.left = (40 + Math.random() * 20) + 'vw';
-                    p.style.top = '50vh';
-                    p.style.background = ['#f472b6', '#fbbf24', '#4ade80'][Math.floor(Math.random()*3)];
-                    p.style.animation = 'floatUp 2s ease-out forwards';
-                    document.getElementById('particles').appendChild(p);
-                    setTimeout(() => p.remove(), 2000);
-                }
-            } else {
-                alert("Please enter a name first!");
-            }
-        }
-    </script>
+// ── WISH GENERATOR ─────────────────────────────────────
+var wishes=[
+    "Happy Birthday, {name}! Today the whole world celebrates YOU. May this year bring you joy beyond measure!",
+    "Wishing you a magical birthday, {name}! May every dream you dare to dream come absolutely true this year!",
+    "Happy Birthday {name}! Another year of growing, glowing and becoming even more amazing than before.",
+    "On your special day, {name} -- may life bring you nothing but warmth, smiles and celebrations worthy of you!",
+    "{name}, the world is a brighter place because of you. May your birthday be as radiant as you are!",
+    "To the wonderful {name} -- may this birthday mark the beginning of your most breathtaking chapter yet!"
+];
+function generateWish(){
+    var n=document.getElementById('wishName').value.trim();
+    var c=document.getElementById('wishCard'),d=document.getElementById('wishText');
+    if(!n){alert('Please enter a name first!');return;}
+    d.innerHTML=wishes[Math.floor(Math.random()*wishes.length)].replace(/{name}/g,n);
+    c.style.display='block';setTimeout(function(){c.style.opacity='1';},50);
+    burstConfetti();
+}
+</script>
 </body>
 </html>
